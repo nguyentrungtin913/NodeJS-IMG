@@ -1,0 +1,74 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+model User {
+  user_id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  user_email String @unique
+  user_password String ?
+  user_first_name String ? 
+  user_last_name String ?
+  user_status Int
+  user_create_at DateTime ?
+  user_update_at DateTime ?
+  user_create_by String ?
+  user_update_by String ?
+  user_deleted Int ? @default(0)
+  user_deleted_at DateTime ?
+  user_tokens Token[]
+  user_images Image[]
+  user_role User_role[]
+}
+
+model User_role {
+  user_id String @id @map("_id")
+  role_id String 
+  user_role_create_date DateTime ?
+  user_role_update_date DateTime ?
+  user_role_create_by String ?
+  user_role_update_by String ?
+  user User? @relation(fields: [user_id], references: [user_id])
+  role Role? @relation(fields: [role_id], references: [role_id]) 
+  @@unique([user_id, role_id])
+}
+
+
+model Role {
+  role_id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  role_name String
+  role_create_date DateTime ?
+  role_update_date DateTime ?
+  role_create_by String ?
+  role_update_by String ?
+  user_role User_role[]
+}
+
+model Image {
+  image_id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  user_id Int
+  image_name String
+  image_path String
+  image_status Int ? @default(0)
+  image_create_date DateTime ?
+  image_update_date DateTime ?
+  image_create_by String ?
+  image_update_by String ?
+  user User ? @relation(fields: [user_id], references: [user_id]) 
+}
+
+
+model Token {
+  access_token String @id @map("_id")
+  user_id Int
+  referesh_token String 
+  token_create_at String 
+  token_expired_at String
+  user User? @relation(fields: [user_id], references: [user_id])  
+}
+
