@@ -12,7 +12,7 @@ export function success(res: Response, code: string, mesKey: string, description
     return res.end(JSON.stringify(result));
 }
 
-export function errors(res: Response, code: string, status: any, msgKey: string, description: any) {
+export async function errors(res: Response, code: string, status: any, msgKey: string, description: any) {
     let result = {
         "code": code,
         "msgKey": msgKey,

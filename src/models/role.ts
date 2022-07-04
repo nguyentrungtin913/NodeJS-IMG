@@ -1,9 +1,29 @@
-import { PrismaClient } from "@prisma/client";
-import _ from "lodash";
-const prisma = new PrismaClient();
+import mongoose from 'mongoose';
+let Schema = mongoose.Schema;
+  
+let roleSchema = new mongoose.Schema({
+  role_name: {
+    type: String,
+    required: true,
+  },
+  role_create_date: {
+    type: Date, 
+    default: Date.now
+  },
+  role_update_date: {
+    type: Date, 
+    default: Date.now
+  },
+  role_create_by: {
+    type: String
+  },
+  role_update_by: {
+    type: String
+  },
+  user_role: {
+    type: Schema.Types.ObjectId,
+    ref: "UserRole"
+  }
+});
 
-export async function listRole() {
-    let roles = await prisma.role.findMany({});
-    roles = roles ?? null;
-    return roles;
-}
+export default mongoose.model('Role', roleSchema);

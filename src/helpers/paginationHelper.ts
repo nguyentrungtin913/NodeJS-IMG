@@ -3,10 +3,9 @@ export function pagination(res: Response, list: any, name: string, code: string,
     let totalPage = 1;
 
     if (totalElement > limit) {
-        totalPage =Math.floor( totalElement / limit);
-        if (totalElement % limit > 0) {
-            totalPage++;
-        }
+        totalPage = Math.ceil(totalElement / limit);
+    }else{
+        totalPage=1;
     }   
     let result = {
         "code": code,
